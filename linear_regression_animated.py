@@ -8,6 +8,7 @@ That is, compute w and b such as the cost function is minimized.
 4. Plot the model
 """
 
+import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as anim
 
@@ -43,7 +44,7 @@ def cost(dataset: list[list[float]], w: float, b: float) -> float:
     return s
 
 
-def dw(dataset, w, b):
+def dw(dataset, w, b) -> float:
     m = len(dataset[0])
     s = 0
     for i in range(m):
@@ -54,13 +55,14 @@ def dw(dataset, w, b):
     return s
 
 
-def db(dataset, w, b):
+def db(dataset, w, b) -> float:
     m = len(dataset[0])
     s = 0
     for i in range(m):
         x = dataset[0][i]
         y = dataset[1][i]
-        s += (w * x + b - y) * (w * x + b - y) / (2 * m)
+        s += (w * x + b - y)
+    s /= m
     return s
 
 
@@ -89,28 +91,38 @@ model_line, = plot.plot(model_x, model_y, 'r-')
 
 # Plot the cost function
 plot = axs[1]
-ws = [-1 + i * .10 for i in range(100)]
-ys = [cost(dataset, current_w, current_b) for current_w in ws]
+w_vals = np.linspace(-5, 5, 100)
+b_vals = np.linspace(-5, 5, 100)
+W, B = np.meshgrid(w_vals, b_vals)
+Z = np.zeros_like(W)
+
+for i in range(W.shape[0]):
+    for j in range(W.shape[1]):
+        Z[i, j] = cost(dataset, W[i, j], B[i, j])
+
+
 plot.set_xlabel("w")
-plot.set_ylabel("J(w,b)")
-plot.plot(ws, ys)
-cost_point = plot.scatter(current_w, cost(dataset, current_w, current_b), c='r')
+plot.set_ylabel("b")
+# plot.set_ylabel("J(w,b)")
+contour = plot.contourf(W, B, Z, levels=50, cmap='viridis')
+fig.colorbar(contour, ax=plot)
+wb_point = plot.scatter(current_w, current_b, color="red")
 
 
 # Animation
 
 def init():
     model_line.set_data([X_MIN, X_MAX], [f_wb(X_MIN, current_w, current_b), f_wb(X_MAX, current_w, current_b)])
-    cost_point.set_offsets([[current_w, cost(dataset, current_w, current_b)]])
-    return cost_point, model_line
+    wb_point.set_offsets([[current_w, current_b]])
+    return wb_point, model_line
 
 
 def update(frame):
     global current_w, current_b
     current_w, current_b = descent_gradient(current_w, current_b, current_alpha)
     model_line.set_data([X_MIN, X_MAX], [f_wb(X_MIN, current_w, current_b), f_wb(X_MAX, current_w, current_b)])
-    cost_point.set_offsets([[current_w, cost(dataset, current_w, current_b)]])
-    return cost_point, model_line
+    wb_point.set_offsets([[current_w, current_b]])
+    return wb_point, model_line
 
 
 ani = anim.FuncAnimation(
@@ -119,7 +131,7 @@ ani = anim.FuncAnimation(
     frames=TRAINING_ITERATIONS + 1,
     init_func=init,
     blit=True,
-    interval=30,
+    interval=60,
     repeat=False
 )
 
