@@ -12,21 +12,15 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as anim
 
-# import random
-# sizes = [(10 + i + random.randint(-2, 2)) * 10 for i in range(12)]
-# prices = [(10 + size + random.randint(-2, 2)) * 10 for size in sizes]
-# dataset = [sizes, prices]
-# print(dataset)
-
-dataset = [
-    [40, 60, 30, 40, 30, 40, 40, 70, 80, 70, 120, 10],
-    [20, 30, 60, 90, 50, 60, 100, 140, 150, 160, 250, 20]
-]
+import random
+x_vals = np.linspace(0, 1, 20)
+y_vals = [x + (-.2 + random.random() * .4) for x in x_vals]
+dataset = [x_vals, y_vals]
 
 current_w = 0
 current_b = 0
-current_alpha = 0.0001
-TRAINING_ITERATIONS = 50
+current_alpha = 0.5
+TRAINING_ITERATIONS = 100
 
 
 def f_wb(x: float, w: float, b: float) -> float:
@@ -39,7 +33,8 @@ def cost(dataset: list[list[float]], w: float, b: float) -> float:
     for i in range(m):
         x = dataset[0][i]
         y = dataset[1][i]
-        s += (f_wb(x, w, b) - y) * (f_wb(x, w, b) - y)
+        prediction_y = f_wb(x, w, b) - y
+        s += prediction_y * prediction_y
     s /= 2 * m
     return s
 
@@ -77,12 +72,12 @@ fig, axs = plt.subplots(ncols=2)
 # Plot dataset
 plot = axs[0]
 plot.scatter(dataset[0], dataset[1])
-plot.set_xlabel("size")
-plot.set_ylabel("price")
+plot.set_xlabel("x")
+plot.set_ylabel("y")
 X_MIN = 0
-X_MAX = 150
+X_MAX = 1
 plot.set_xlim([X_MIN, X_MAX])
-plot.set_ylim([0, 300])
+plot.set_ylim([0, 1])
 
 # Plot the model
 model_x = [X_MIN, X_MAX]
@@ -103,9 +98,9 @@ for i in range(W.shape[0]):
 
 plot.set_xlabel("w")
 plot.set_ylabel("b")
-# plot.set_ylabel("J(w,b)")
 contour = plot.contourf(W, B, Z, levels=50, cmap='viridis')
-fig.colorbar(contour, ax=plot)
+cbar = fig.colorbar(contour, ax=plot)
+cbar.set_label("J(w,b)")
 wb_point = plot.scatter(current_w, current_b, color="red")
 
 
