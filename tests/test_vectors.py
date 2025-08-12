@@ -5,9 +5,8 @@ import pytest
 from numa.vector import Vector
 
 
-def test_comparing_with_an_incompatible_type_throw_a_value_error():
-    with pytest.raises(ValueError):
-        _ = Vector([1]) == 1
+def test_comparing_with_an_another_type_is_false():
+    assert Vector([1]) != 1
 
 
 def test_comparing_distinct_vectors_return_false():
@@ -74,3 +73,7 @@ def test_linear_space_factory():
 
 def test_iterate_through_vectors():
     assert list(Vector([1, 2, 3])) == [1, 2, 3]
+
+
+def test_accessing_element_by_index():
+    assert Vector([1, 2, 3])[1] == 2

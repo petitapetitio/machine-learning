@@ -11,7 +11,7 @@ class Vector(Iterable):
     def __eq__(self, other):
         if isinstance(other, Vector):
             return self._elements == other._elements
-        raise ValueError
+        return False
 
     def __repr__(self):
         return f"Vector([{self._elements}])"
@@ -42,6 +42,9 @@ class Vector(Iterable):
 
     def __iter__(self):
         return iter(self._elements)
+
+    def __getitem__(self, item):
+        return self._elements[item]
 
     @classmethod
     def linspace(cls, lo: float, hi: float, n: int):
