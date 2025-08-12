@@ -14,14 +14,14 @@ import matplotlib.animation as anim
 
 import random
 
-from aitk.linear_regression import UnivariateLinearProblemDataset, LinearModel, UnivariateLinearRegression
+from aitk.linear_regression import UnivariateLinearProblemDataset, UnivariateLinearModel, UnivariateLinearRegression
 from numa.vector import Vector
 
 x_vals = Vector.linspace(0, 1, 20)
 y_vals = Vector([x + (-.2 + random.random() * .4) for x in x_vals])
 dataset = UnivariateLinearProblemDataset.create(x_vals, y_vals)
 
-model = LinearModel(0, 0)
+model = UnivariateLinearModel(0, 0)
 regression = UnivariateLinearRegression(n_iterations=100, learning_rate=0.5)
 
 
@@ -51,7 +51,7 @@ Z = np.zeros_like(W)
 
 for i in range(W.shape[0]):
     for j in range(W.shape[1]):
-        Z[i, j] = LinearModel(w=float(W[i, j]), b=float(B[i, j])).cost(dataset)
+        Z[i, j] = UnivariateLinearModel(w=float(W[i, j]), b=float(B[i, j])).cost(dataset)
 
 
 plot.set_xlabel("w")

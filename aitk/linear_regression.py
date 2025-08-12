@@ -4,6 +4,9 @@ from dataclasses import dataclass
 from numa.vector import Vector
 
 
+# TODO : implement MultipleLinearRegression
+
+
 @dataclass(frozen=True)
 class UnivariateLinearProblemDataset:
     X: Vector
@@ -20,14 +23,17 @@ class UnivariateLinearProblemDataset:
 
 
 @dataclass(frozen=True)
-class LinearModel:
+class UnivariateLinearModel:
+    # score
+    # predict
+
     w: float
     b: float
 
-    def descent_gradient(self, dataset: UnivariateLinearProblemDataset, learning_rate: float) -> LinearModel:
+    def descent_gradient(self, dataset: UnivariateLinearProblemDataset, learning_rate: float) -> UnivariateLinearModel:
         new_w = self.w - learning_rate * self._dw(dataset)
         new_b = self.b - learning_rate * self._db(dataset)
-        return LinearModel(new_w, new_b)
+        return UnivariateLinearModel(new_w, new_b)
 
     def _dw(self, dataset: UnivariateLinearProblemDataset) -> float:
         s = 0
@@ -39,7 +45,7 @@ class LinearModel:
     def _db(self, dataset: UnivariateLinearProblemDataset) -> float:
         s = 0
         for x, y in zip(dataset.X, dataset.Y):
-            s += (self.w * x + self.b - y)
+            s += self.f(x) - y
         s /= dataset.size()
         return s
 
@@ -55,13 +61,14 @@ class LinearModel:
         return s
 
 
+
 @dataclass(frozen=True)
 class UnivariateLinearRegression:
     n_iterations: int
     learning_rate: float
 
-    def fit(self, dataset: UnivariateLinearProblemDataset) -> LinearModel:
-        model = LinearModel(0, 0)
+    def fit(self, dataset: UnivariateLinearProblemDataset) -> UnivariateLinearModel:
+        model = UnivariateLinearModel(0, 0)
         for _ in range(self.n_iterations):
             model = model.descent_gradient(dataset, self.learning_rate)
 
