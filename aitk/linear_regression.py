@@ -66,16 +66,3 @@ class UnivariateLinearRegression:
             model = model.descent_gradient(dataset, self.learning_rate)
 
         return model
-
-
-# @dataclass(frozen=True)
-# class MultipleLinearRegression:
-#     n_iterations: int
-#     learning_rate: float
-#
-#     def fit(self, dataset: MultipleLinearProblemDataset) -> LinearModel:
-#         model = LinearModel(0, 0)
-#         for _ in range(self.n_iterations):
-#             model = model.descent_gradient(dataset, self.learning_rate)
-#
-#         return model
