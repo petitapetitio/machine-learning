@@ -1,32 +1,24 @@
-"""
-The goal is to compute a linear regression of a dataset.
-That is, compute w and b such as the cost function is minimized.
-
-1. Create a dataset
-2. Plot the dataset
-3. Initialize the model with random w and b values
-4. Plot the model
-"""
-
 import matplotlib.pyplot as plt
 import matplotlib.animation as anim
 
 import numpy as np
 
+from aitk.feature_scaling import z_score_normalization
 from aitk.multiple_linear_regression import MultipleLinearProblemDataset, MultipleLinearModel, MultipleLinearRegression
 from datasets.dataset_2D_regression import x1, x2, y
 from numa.vector import Vector
 from numa.matrix import Matrix
 
 # TODO : afficher le nombre d'itérations
+# TODO : màj costs
 
 dataset = MultipleLinearProblemDataset.create(
-    Matrix.with_columns(Vector(x1), Vector(x2)),
-    Vector(y)
+    Matrix.with_columns(Vector(z_score_normalization(x1)), Vector(z_score_normalization(x2))),
+    Vector(z_score_normalization(y))
 )
 
 model = MultipleLinearModel(Vector.zeros(dataset.nb_features()), 0)
-regression = MultipleLinearRegression(n_iterations=5000, learning_rate=0.0005)
+regression = MultipleLinearRegression(n_iterations=5000, learning_rate=0.1)
 
 
 fig = plt.figure(figsize=(12, 6))

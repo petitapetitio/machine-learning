@@ -46,7 +46,7 @@ def test_subtracting_two_vectors_of_different_shape_raise_a_value_error():
 
 
 def test_dot_product_of_two_vectors():
-    assert Vector([1, 2, 3]).dot(Vector([5, 7, 11])) == Vector([5, 14, 33])
+    assert Vector([1, 2, 3]).dot(Vector([5, 7, 11])) == 5 + 14 + 33
 
 
 def test_dot_product_of_two_vectors_of_different_shape_raise_a_value_error():

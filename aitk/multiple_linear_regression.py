@@ -38,13 +38,13 @@ class MultipleLinearModel:
 
     def _dw(self, dataset: MultipleLinearProblemDataset) -> Vector:
         w = [0] * dataset.nb_features()
-        for i in range(dataset.nb_features()):
+        for j in range(dataset.nb_features()):
             s = 0
-            xi = dataset.X.column(i)
-            for j in range(dataset.nb_samples()):
-                s += (self.f(dataset.X.row(j)) - dataset.y[i]) * xi[j]
+            xj = dataset.X.column(j)
+            for i in range(dataset.nb_samples()):
+                s += (self.f(dataset.X.row(i)) - dataset.y[i]) * xj[i]
             s /= dataset.nb_samples()
-            w[i] = s
+            w[j] = s
         return Vector(w)
 
     def _db(self, dataset: MultipleLinearProblemDataset) -> float:
@@ -55,9 +55,7 @@ class MultipleLinearModel:
         return s
 
     def f(self, x: Vector) -> float:
-        if not isinstance(x, Vector):
-            print("ai")
-        return sum(x.dot(self.w)) + self.b
+        return x.dot(self.w) + self.b
 
     def cost(self, dataset: MultipleLinearProblemDataset) -> float:
         s = 0
