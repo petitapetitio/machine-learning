@@ -14,7 +14,7 @@ class Vector(Iterable):
         return False
 
     def __repr__(self):
-        return f"Vector([{self._elements}])"
+        return f"Vector({self._elements})"
 
     def __add__(self, other):
         if isinstance(other, Vector) and self.size() == other.size():
