@@ -42,8 +42,10 @@ i_neg = [i for i, yi in enumerate(y) if yi < 0.5]
 x1_pos = [x1[i] for i in i_pos]
 x2_pos = [x2[i] for i in i_pos]
 
-fig = plt.figure(figsize=(6, 6))
+fig = plt.figure(figsize=(12, 6))
 plt.subplots_adjust(wspace=0.4)
+title = fig.suptitle("Multiple Logistic Regression")
+
 
 ax = fig.add_subplot(1, 2, 1)
 ax.set_xlabel("X1")
@@ -65,6 +67,7 @@ ax2.set_ylim(0, 0.4)
 costs_by_iteration = [model.cost(dataset)]
 cost_plot = ax2.plot(costs_by_iteration)[0]
 
+# Drawing the learning curve in one shot
 # y = [0] * n_iterations
 # m = MultipleLogisticModel(Vector.zeros(2), 0)
 # for i in range(n_iterations):
@@ -81,6 +84,8 @@ def update(frame):
 
     costs_by_iteration.append(model.cost(dataset))
     cost_plot.set_data([list(range(len(costs_by_iteration))), costs_by_iteration])
+
+    title.set_text(f"Multiple Linear Regression (iteration = {frame+1})")
 
     return model_boundary, cost_plot
 
