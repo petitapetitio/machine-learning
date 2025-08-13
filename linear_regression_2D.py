@@ -10,6 +10,15 @@ from datasets.dataset_2D_regression import x1, x2, y
 from numa.vector import Vector
 from numa.matrix import Matrix
 
+"""
+Imaginons que j'ai un historique de données de ventes.
+Afin de gagner du temps dans mes estimations, je souhaite déterminer le prix probable d'un bien à partir de sa superficie et du nombre de pièces.
+Je cherche un modèle qui, étant donné deux paramètres d'entrée, X et Y, me donne une valeur de sortie Z.
+Ce modèle peut être représenté sous la forme d'un plan. 
+Si je connais X et Y, je peux lire sur le graphe la valeur Z.
+La régression linéaire permet de trouver les paramètres de ce plan de façon itérative.
+"""
+
 dataset = MultipleLinearProblemDataset.create(
     Matrix.with_columns(Vector(z_score_normalization(x1)), Vector(z_score_normalization(x2))),
     Vector(z_score_normalization(y))
