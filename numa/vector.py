@@ -35,7 +35,7 @@ class Vector(Iterable):
     def size(self) -> int:
         return len(self._elements)
 
-    def dot(self, other: Vector):
+    def dot(self, other: Vector) -> Vector:
         if self.size() == other.size():
             return Vector([x * y for x, y in zip(self._elements, other._elements)])
         raise ValueError

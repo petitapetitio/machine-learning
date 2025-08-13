@@ -2,7 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 
 from numa.vector import Vector
-from tests.test_matrix import Matrix
+from numa.matrix import Matrix
 
 
 @dataclass(frozen=True)
@@ -37,29 +37,31 @@ class MultipleLinearModel:
         return MultipleLinearModel(new_w, new_b)
 
     def _dw(self, dataset: MultipleLinearProblemDataset) -> Vector:
-        nb_features = self.w.size()
-        w = [0] * nb_features
-        for i in range(nb_features):
+        w = [0] * dataset.nb_features()
+        for i in range(dataset.nb_features()):
             s = 0
-            for x, y in zip(dataset.X.column(i), dataset.y):
-                s += (self.f(x) - y) * x
+            xi = dataset.X.column(i)
+            for j in range(dataset.nb_samples()):
+                s += (self.f(dataset.X.row(j)) - dataset.y[i]) * xi[j]
             s /= dataset.nb_samples()
             w[i] = s
         return Vector(w)
 
     def _db(self, dataset: MultipleLinearProblemDataset) -> float:
         s = 0
-        for x, y in zip(dataset.X.columns(), dataset.y):
+        for x, y in zip(dataset.X.rows(), dataset.y):
             s += self.f(x) - y
         s /= dataset.nb_samples()
         return s
 
     def f(self, x: Vector) -> float:
-        return x.dot(self.w) + self.b
+        if not isinstance(x, Vector):
+            print("ai")
+        return sum(x.dot(self.w)) + self.b
 
     def cost(self, dataset: MultipleLinearProblemDataset) -> float:
         s = 0
-        for x, y in zip(dataset.X.columns(), dataset.y):
+        for x, y in zip(dataset.X.rows(), dataset.y):
             prediction_y = self.f(x) - y
             s += prediction_y * prediction_y
         s /= 2 * dataset.nb_samples()
