@@ -43,6 +43,8 @@ x1_pos = [x1[i] for i in i_pos]
 x2_pos = [x2[i] for i in i_pos]
 
 fig = plt.figure(figsize=(6, 6))
+plt.subplots_adjust(wspace=0.4)
+
 ax = fig.add_subplot(1, 2, 1)
 ax.set_xlabel("X1")
 ax.set_ylabel("X2")
@@ -58,12 +60,17 @@ model_boundary = ax.plot(list(x1s), x2s)[0]
 
 # Plot the learning curve
 ax2 = fig.add_subplot(1, 2, 2)
-y = [0] * n_iterations
-m = MultipleLogisticModel(Vector.zeros(2), 0)
-for i in range(n_iterations):
-    y[i] = m.cost(dataset)
-    m = m.descent_gradient(dataset, learning_rate=learning_rate)
-ax2.plot(list(range(n_iterations)), y)
+ax2.set_xlim(0, n_iterations)
+ax2.set_ylim(0, 0.4)
+costs_by_iteration = [model.cost(dataset)]
+cost_plot = ax2.plot(costs_by_iteration)[0]
+
+# y = [0] * n_iterations
+# m = MultipleLogisticModel(Vector.zeros(2), 0)
+# for i in range(n_iterations):
+#     y[i] = m.cost(dataset)
+#     m = m.descent_gradient(dataset, learning_rate=learning_rate)
+# ax2.plot(list(range(n_iterations)), y)
 
 
 def update(frame):
@@ -71,7 +78,11 @@ def update(frame):
     model = model.descent_gradient(dataset, learning_rate)
     x2s = [-(model.b + model.w[0] * x1i) / model.w[1] for x1i in x1s]
     model_boundary.set_data(list(x1s), x2s)
-    return model_boundary,
+
+    costs_by_iteration.append(model.cost(dataset))
+    cost_plot.set_data([list(range(len(costs_by_iteration))), costs_by_iteration])
+
+    return model_boundary, cost_plot
 
 
 ani = animation.FuncAnimation(
