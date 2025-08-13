@@ -21,7 +21,7 @@ La régression linéaire permet de trouver les paramètres de ce plan de façon 
 
 dataset = MultipleLinearProblemDataset.create(
     Matrix.with_columns(Vector(z_score_normalization(x1)), Vector(z_score_normalization(x2))),
-    Vector(z_score_normalization(y))
+    Vector(z_score_normalization(y))  # pas sûr qu'on normalize Z dans la vraie vie (mais c'est pratique ici pour tracer b à la même échelle que w1 et w2)
 )
 
 model = MultipleLinearModel(Vector.zeros(dataset.nb_features()), 0)
