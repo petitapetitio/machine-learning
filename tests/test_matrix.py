@@ -11,7 +11,9 @@ Factories
 - Ajouter une colonne
 - Créer une matrice à partir de 2 vecteurs
 """
-from numbers import Number
+from __future__ import annotations
+
+from typing import Generator
 
 import pytest
 
@@ -21,15 +23,17 @@ from numa.vector import Vector
 class Matrix:
     def __init__(self, rows: list[Vector]):
         self._rows = rows
+        self.m = len(rows)
+        self.n = 0 if len(rows) == 0 else rows[0].size()
 
     @classmethod
-    def create(cls, rows: list[Vector]):
+    def create(cls, rows: list[Vector]) -> Matrix:
         if not _are_all_of_same_size(rows):
             raise ValueError
         return Matrix(rows)
 
     @classmethod
-    def _c(cls, *columns: Vector):
+    def with_columns(cls, *columns: Vector) -> Matrix:
         cols = list(columns)
         if len(cols) == 0:
             return Matrix([])
@@ -57,6 +61,15 @@ class Matrix:
         s += "])"
         return s
 
+    def column(self, i: int):
+        if i < 0 or i >= self.n:
+            raise IndexError(f"{i} out of range [0, {self.n - 1}")
+        return Vector([r[i] for r in self._rows])
+
+    def columns(self) -> Generator[Vector, None, None]:
+        for i in range(self.n):
+            yield self.column(i)
+
 
 def _are_all_of_same_size(vectors: list[Vector]):
     size = vectors[0].size()
@@ -75,7 +88,7 @@ def test_comparison_with_another_type_is_false():
 
 
 def test_create_matrix_from_vectors():
-    assert Matrix._c(
+    assert Matrix.with_columns(
         Vector([1, 2, 3]),
         Vector([4, 5, 6])
     ) == Matrix([
@@ -87,11 +100,26 @@ def test_create_matrix_from_vectors():
 
 def test_create_matrix_from_vectors_of_different_size_raise_a_value_error():
     with pytest.raises(ValueError):
-        Matrix._c(
+        Matrix.with_columns(
             Vector([1]),
             Vector([4, 5])
         )
 
 
-def accessing_columns():
-    pass
+def test_column_are_indexed_from_zero():
+    assert Matrix.with_columns(Vector([1, 2, 3])).column(0) == Vector([1, 2, 3])
+
+
+def test_accessing_column_by_invalid_index_raise_index_error():
+    with pytest.raises(IndexError):
+        Matrix.with_columns(Vector([1, 2, 3])).column(1)
+
+
+def test_accessing_columns():
+    assert list(Matrix.with_columns(
+        Vector([1, 2]),
+        Vector([4, 5])
+    ).columns()) == [
+        Vector([1, 2]),
+        Vector([4, 5]),
+    ]

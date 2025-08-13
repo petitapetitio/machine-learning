@@ -71,9 +71,19 @@ def test_linear_space_factory():
     assert Vector.linspace(0, 1, 3) == Vector([0, .5, 1])
 
 
+def test_creating_a_vector_of_zeros():
+    assert Vector.zeros(3) == Vector([0, 0, 0])
+
+
+def test_creating_a_vector_of_zeros_except_a_positive_size():
+    with pytest.raises(ValueError):
+        Vector.zeros(-1)
+
+
 def test_iterate_through_vectors():
     assert list(Vector([1, 2, 3])) == [1, 2, 3]
 
 
 def test_accessing_element_by_index():
     assert Vector([1, 2, 3])[1] == 2
+

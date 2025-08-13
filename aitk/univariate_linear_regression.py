@@ -4,9 +4,6 @@ from dataclasses import dataclass
 from numa.vector import Vector
 
 
-# TODO : implement MultipleLinearRegression
-
-
 @dataclass(frozen=True)
 class UnivariateLinearProblemDataset:
     X: Vector
@@ -59,7 +56,6 @@ class UnivariateLinearModel:
             s += prediction_y * prediction_y
         s /= 2 * dataset.size()
         return s
-
 
 
 @dataclass(frozen=True)

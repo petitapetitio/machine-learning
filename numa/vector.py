@@ -50,3 +50,10 @@ class Vector(Iterable):
     def linspace(cls, lo: float, hi: float, n: int):
         delta = (hi - lo) / (n - 1)
         return Vector([lo + i * delta for i in range(n)])
+
+    @classmethod
+    def zeros(cls, n):
+        if n < 0:
+            raise ValueError
+
+        return Vector([0] * n)

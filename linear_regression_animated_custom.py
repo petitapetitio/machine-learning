@@ -14,7 +14,7 @@ import matplotlib.animation as anim
 
 import random
 
-from aitk.linear_regression import UnivariateLinearProblemDataset, UnivariateLinearModel, UnivariateLinearRegression
+from aitk.univariate_linear_regression import UnivariateLinearProblemDataset, UnivariateLinearModel, UnivariateLinearRegression
 from numa.vector import Vector
 
 x_vals = Vector.linspace(0, 1, 20)
