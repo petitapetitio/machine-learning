@@ -1,3 +1,4 @@
+
 def divide_by_max(x: list[float]) -> list[float]:
     x_max = max(x)
     return [xi / x_max for xi in x]
