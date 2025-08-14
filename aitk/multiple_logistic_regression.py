@@ -65,13 +65,10 @@ class MultipleLogisticModel:
         return score
 
 
-def _sigmoid(z: float) -> float:
-    if z < -700:
-        return 1e-15
-    if z > 700:
-        return 1 - 1e-15
-
-    return 1 / (1 + math.exp(-z))
+def _sigmoid(z: float, eps=1e-12) -> float:
+    s = 1 / (1 + math.exp(-z))
+    s = min(max(s, eps), 1-eps)
+    return s
 
 
 @dataclass(frozen=True)
