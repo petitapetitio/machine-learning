@@ -8,29 +8,22 @@ from datasets.dataset_2D_classification_poly import x1 as x1_raw
 from datasets.dataset_2D_classification_poly import x2 as x2_raw
 from datasets.dataset_2D_classification_poly import y as y_raw
 from numa.matrix import Matrix
+from numa.poly import degrees
 from numa.vector import Vector
 
 x1 = Vector(z_score_normalization(x1_raw))
 x2 = Vector(z_score_normalization(x2_raw))
 y = Vector(y_raw)
 
+n = 6
+degs = degrees(n)
 dataset = MultipleLogisticProblemDataset.create(
-    X=Matrix.with_columns(
-        x1,
-        x2,
-        x1 ** 2,
-        x1.multiply(x2),
-        x2 ** 2,
-        x1 ** 3,
-        (x1 ** 2).multiply(x2),
-        x1.multiply(x2 ** 2),
-        x2 ** 3,
-    ),
+    X=Matrix.with_columns(*[(x1**p1).multiply(x2**p2) for p1, p2 in degs]),
     y=y
 )
 
 n_iterations = 1000
-learning_rate = 0.01
+learning_rate = 0.00001
 model = MultipleLogisticModel(w=Vector([0.01] * dataset.nb_features()), b=0)
 
 i_pos = [i for i, yi in enumerate(y) if yi >= 0.5]
@@ -38,7 +31,7 @@ i_neg = [i for i, yi in enumerate(y) if yi < 0.5]
 
 fig = plt.figure(figsize=(12, 6))
 plt.subplots_adjust(wspace=0.4)
-title = fig.suptitle("Multiple Logistic Regression (degree=2)")
+title = fig.suptitle(f"Multiple Logistic Regression (degree={n})")
 
 
 ax = fig.add_subplot(1, 3, 1)
@@ -64,17 +57,7 @@ def get_contour(m: MultipleLogisticModel, definition: int):
         for j in range(Z.shape[1]):
             xij1 = X1[i, j]
             xij2 = X2[i, j]
-            Z[i, j] = m.f(Vector([
-                xij1,
-                xij2,
-                xij1 ** 2,
-                xij1 * xij2,
-                xij2 ** 2,
-                xij1 ** 3,
-                (xij1 ** 2) * xij2,
-                xij1 * (xij2 ** 2),
-                xij2 ** 3
-            ]))
+            Z[i, j] = m.f(Vector([(xij1 ** p1) * (xij2 ** p2) for p1, p2 in degs]))
     return X1, X2, Z
 
 
@@ -87,7 +70,7 @@ ax2.set_title("Learning curve")
 ax2.set_xlabel("n iterations")
 ax2.set_ylabel("cost")
 ax2.set_xlim(0, n_iterations)
-ax2.set_ylim(0, 0.4)
+ax2.set_ylim(0, 1)
 costs_by_iteration = [model.cost(dataset)]
 cost_plot = ax2.plot(costs_by_iteration)[0]
 
