@@ -1,13 +1,3 @@
-"""
-Charger le dataset
-Dessiner le dataset en mode scatter (x1, x2) (style différent selon True/False, séparer les données avant)
-Coder la regression logistique multiple
-Afficher les coefficients
-Dessiner le modèle
-
-Créer version polynomiale
-Ajouter régularisation
-"""
 import matplotlib.pyplot as plt
 from matplotlib import animation
 

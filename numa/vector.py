@@ -38,13 +38,16 @@ class Vector(Iterable):
     def dot(self, other: Vector) -> float:
         if self.size() == other.size():
             return sum([x * y for x, y in zip(self._elements, other._elements)])
-        raise ValueError
+        raise ValueError(f"the size of {other} is different than {self}")
 
     def __iter__(self):
         return iter(self._elements)
 
     def __getitem__(self, item):
         return self._elements[item]
+
+    def __pow__(self, power, modulo=None) -> Vector:
+        return Vector([x ** power for x in self._elements])
 
     @classmethod
     def linspace(cls, lo: float, hi: float, n: int):
@@ -57,3 +60,8 @@ class Vector(Iterable):
             raise ValueError
 
         return Vector([0] * n)
+
+    def multiply(self, other: Vector) -> Vector:
+        if other.size() != self.size():
+            raise ValueError
+        return Vector([x * y for x, y in zip(self._elements, other._elements)])
