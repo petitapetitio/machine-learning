@@ -30,28 +30,28 @@ class MultipleLogisticModel:
     w: Vector
     b: float
 
-    def descent_gradient(self, dataset: MultipleLogisticProblemDataset, learning_rate: float) -> MultipleLogisticModel:
-        new_w = self.w - self._dw(dataset) * learning_rate
+    def descent_gradient(self, dataset: MultipleLogisticProblemDataset, learning_rate: float, lambda_: float = 0) -> MultipleLogisticModel:
+        new_w = self.w - self._dw(dataset, lambda_) * learning_rate
         new_b = self.b - self._db(dataset) * learning_rate
         return MultipleLogisticModel(new_w, new_b)
 
-    def _dw(self, dataset: MultipleLogisticProblemDataset) -> Vector:
-        w = [0] * dataset.nb_features()
+    def _dw(self, dataset: MultipleLogisticProblemDataset, lambda_: float) -> Vector:
+        dw = [0] * dataset.nb_features()
         for j in range(dataset.nb_features()):
             s = 0
             xj = dataset.X.column(j)
             for i in range(dataset.nb_samples()):
-                s += (self.f(dataset.X.row(i)) - dataset.y[i]) * xj[i]
+                s += (self.f(dataset.X.row(i)) - dataset.y[i]) * xj[i] + (lambda_ * self.w[j])
             s /= dataset.nb_samples()
-            w[j] = s
-        return Vector(w)
+            dw[j] = s
+        return Vector(dw)
 
     def _db(self, dataset: MultipleLogisticProblemDataset) -> float:
-        s = 0
+        db = 0
         for x, y in zip(dataset.X.rows(), dataset.y):
-            s += self.f(x) - y
-        s /= dataset.nb_samples()
-        return s
+            db += self.f(x) - y
+        db /= dataset.nb_samples()
+        return db
 
     def f(self, x: Vector) -> float:
         return _sigmoid(x.dot(self.w) + self.b)

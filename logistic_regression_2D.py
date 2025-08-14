@@ -23,7 +23,6 @@ dataset = MultipleLogisticProblemDataset.create(
 
 n_iterations = 1000
 learning_rate = 5
-# model = MultipleLogisticModel(w=Vector([0.03070169046435127, 0.02275950116778541]), b=-2.8494625416534785)
 model = MultipleLogisticModel(w=Vector([0.01, 0.01]), b=0)
 
 i_pos = [i for i, yi in enumerate(y) if yi >= 0.5]

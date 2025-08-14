@@ -15,6 +15,7 @@ x1 = Vector(z_score_normalization(x1_raw))
 x2 = Vector(z_score_normalization(x2_raw))
 y = Vector(y_raw)
 
+lambda_ = 0
 n = 6
 degs = degrees(n)
 dataset = MultipleLogisticProblemDataset.create(
@@ -31,7 +32,7 @@ i_neg = [i for i, yi in enumerate(y) if yi < 0.5]
 
 fig = plt.figure(figsize=(12, 6))
 plt.subplots_adjust(wspace=0.4)
-title = fig.suptitle(f"Multiple Logistic Regression (degree={n})")
+title = fig.suptitle(f"Multiple Logistic Regression (degree={n}, lambda={lambda_})")
 
 
 ax = fig.add_subplot(1, 3, 1)
@@ -78,7 +79,7 @@ cost_plot = ax2.plot(costs_by_iteration)[0]
 ax3 = fig.add_subplot(1, 3, 3)
 ax3.set_title("Parameters")
 ax3.set_xlim(0, n_iterations)
-ax3.set_ylim(-1, 5)
+ax3.set_ylim(-.1, .1)
 params_history = [[model.b]] + [[wi] for wi in model.w]
 param_plots = []
 
@@ -91,7 +92,7 @@ for i, param_history in enumerate(params_history[1:]):
 
 def update(frame):
     global model, model_boundary
-    model = model.descent_gradient(dataset, learning_rate)
+    model = model.descent_gradient(dataset, learning_rate, lambda_=lambda_)
 
     model_boundary.remove()
     X1, X2, Z = get_contour(model, definition=contour_definition)
