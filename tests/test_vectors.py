@@ -92,6 +92,10 @@ def test_powering_vectors():
     assert Vector([1, 2, 3]) ** 2 == Vector([1, 4, 9])
 
 
+def test_powering_vectors_by_0_give_the_unit_vector():
+    assert Vector([1, 2, 3]) ** 0 == Vector([1, 1, 1])
+
+
 def test_multiplying_vectors():
     assert Vector([1, 2, 3]).multiply(Vector([1, 2, 3])) == Vector([1, 4, 9])
 
