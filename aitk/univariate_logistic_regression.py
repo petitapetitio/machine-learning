@@ -3,6 +3,7 @@ from __future__ import annotations
 import math
 from dataclasses import dataclass
 
+from numa.sigmoid import sigmoid
 from numa.vector import Vector
 
 
@@ -57,10 +58,6 @@ class UnivariateLogisticModel:
             score += loss
         score /= 2 * dataset.size()
         return score
-
-
-def sigmoid(z: float) -> float:
-    return 1 / (1 + math.exp(-z))
 
 
 @dataclass(frozen=True)

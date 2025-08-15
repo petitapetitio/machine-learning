@@ -4,6 +4,7 @@ import math
 from dataclasses import dataclass
 
 from numa.matrix import Matrix
+from numa.sigmoid import sigmoid
 from numa.vector import Vector
 
 
@@ -59,7 +60,7 @@ class MultipleLogisticModel:
         return db
 
     def f(self, x: Vector) -> float:
-        return _sigmoid(x.dot(self.w) + self.b)
+        return sigmoid(x.dot(self.w) + self.b)
 
     def cost(self, dataset: MultipleLogisticProblemDataset) -> float:
         score = 0
@@ -68,12 +69,6 @@ class MultipleLogisticModel:
             score += loss
         score /= 2 * dataset.nb_samples()
         return score
-
-
-def _sigmoid(z: float, eps=1e-12) -> float:
-    s = 1 / (1 + math.exp(-z))
-    s = min(max(s, eps), 1 - eps)
-    return s
 
 
 @dataclass(frozen=True)
