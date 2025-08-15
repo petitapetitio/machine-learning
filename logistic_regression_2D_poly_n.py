@@ -3,7 +3,10 @@ import numpy as np
 from matplotlib import animation
 
 from aitk.feature_scaling import z_score_normalization
-from aitk.multiple_logistic_regression import MultipleLogisticProblemDataset, MultipleLogisticModel
+from aitk.multiple_logistic_regression import (
+    MultipleLogisticProblemDataset,
+    MultipleLogisticModel,
+)
 from datasets.dataset_2D_classification_poly import x1 as x1_raw
 from datasets.dataset_2D_classification_poly import x2 as x2_raw
 from datasets.dataset_2D_classification_poly import y as y_raw
@@ -19,8 +22,7 @@ lambda_ = 0
 n = 6
 degs = degrees(n)
 dataset = MultipleLogisticProblemDataset.create(
-    X=Matrix.with_columns(*[(x1**p1).multiply(x2**p2) for p1, p2 in degs]),
-    y=y
+    X=Matrix.with_columns(*[(x1**p1).multiply(x2**p2) for p1, p2 in degs]), y=y
 )
 
 n_iterations = 1000
@@ -58,13 +60,13 @@ def get_contour(m: MultipleLogisticModel, definition: int):
         for j in range(Z.shape[1]):
             xij1 = X1[i, j]
             xij2 = X2[i, j]
-            Z[i, j] = m.f(Vector([(xij1 ** p1) * (xij2 ** p2) for p1, p2 in degs]))
+            Z[i, j] = m.f(Vector([(xij1**p1) * (xij2**p2) for p1, p2 in degs]))
     return X1, X2, Z
 
 
 contour_definition = 100
 X1, X2, Z = get_contour(model, definition=contour_definition)
-model_boundary = ax.contour(X1, X2, Z, levels=[0.5], colors='red')
+model_boundary = ax.contour(X1, X2, Z, levels=[0.5], colors="red")
 
 ax2 = fig.add_subplot(1, 3, 2)
 ax2.set_title("Learning curve")
@@ -79,7 +81,7 @@ cost_plot = ax2.plot(costs_by_iteration)[0]
 ax3 = fig.add_subplot(1, 3, 3)
 ax3.set_title("Parameters")
 ax3.set_xlim(0, n_iterations)
-ax3.set_ylim(-.1, .1)
+ax3.set_ylim(-0.1, 0.1)
 params_history = [[model.b]] + [[wi] for wi in model.w]
 param_plots = []
 
@@ -96,7 +98,7 @@ def update(frame):
 
     model_boundary.remove()
     X1, X2, Z = get_contour(model, definition=contour_definition)
-    model_boundary = ax.contour(X1, X2, Z, levels=[0.5], colors='red')
+    model_boundary = ax.contour(X1, X2, Z, levels=[0.5], colors="red")
 
     cost = model.cost(dataset)
     costs_by_iteration.append(cost)
@@ -104,7 +106,7 @@ def update(frame):
 
     params_history[0].append(model.b)
     for i, wi in enumerate(model.w):
-        params_history[i+1].append(wi)
+        params_history[i + 1].append(wi)
     for param_history, param_plot in zip(params_history, param_plots):
         param_plot.set_data(list(range(len(param_history))), param_history)
 
@@ -117,7 +119,7 @@ ani = animation.FuncAnimation(
     frames=n_iterations + 1,
     blit=True,
     interval=60,
-    repeat=False
+    repeat=False,
 )
 
 plt.legend()

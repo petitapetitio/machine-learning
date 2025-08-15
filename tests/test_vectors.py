@@ -59,7 +59,7 @@ def test_multiplying_by_an_integer():
 
 
 def test_multiplying_by_a_float():
-    assert Vector([1, 2, 3]) * 2.0 == Vector([2., 4., 6.])
+    assert Vector([1, 2, 3]) * 2.0 == Vector([2.0, 4.0, 6.0])
 
 
 def test_multiplying_by_an_invalid_type_raise_a_value_error():
@@ -68,7 +68,7 @@ def test_multiplying_by_an_invalid_type_raise_a_value_error():
 
 
 def test_linear_space_factory():
-    assert Vector.linspace(0, 1, 3) == Vector([0, .5, 1])
+    assert Vector.linspace(0, 1, 3) == Vector([0, 0.5, 1])
 
 
 def test_creating_a_vector_of_zeros():

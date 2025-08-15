@@ -47,7 +47,7 @@ class Vector(Iterable):
         return self._elements[item]
 
     def __pow__(self, power, modulo=None) -> Vector:
-        return Vector([x ** power for x in self._elements])
+        return Vector([x**power for x in self._elements])
 
     @classmethod
     def linspace(cls, lo: float, hi: float, n: int):
@@ -62,6 +62,7 @@ class Vector(Iterable):
         return Vector([0] * n)
 
     def multiply(self, other: Vector) -> Vector:
+        """The Hadamard product"""
         if other.size() != self.size():
             raise ValueError
         return Vector([x * y for x, y in zip(self._elements, other._elements)])

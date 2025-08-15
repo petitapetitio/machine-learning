@@ -10,7 +10,7 @@ class Matrix:
         self.n = 0 if len(rows) == 0 else rows[0].size()
 
     @classmethod
-    def create(cls, rows: list[Vector]) -> Matrix:
+    def with_rows(cls, rows: list[Vector]) -> Matrix:
         if not _are_all_of_same_size(rows):
             raise ValueError
         return Matrix(rows)
@@ -58,6 +58,8 @@ class Matrix:
     def row(self, i: int):
         return self._rows[i]
 
+    def transpose(self) -> Matrix:
+        return Matrix.with_columns(*self._rows)
 
 
 def _are_all_of_same_size(vectors: list[Vector]):

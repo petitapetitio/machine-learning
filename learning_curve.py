@@ -1,14 +1,17 @@
 import matplotlib.pyplot as plt
 
 from aitk.feature_scaling import z_score_normalization
-from aitk.multiple_linear_regression import MultipleLinearProblemDataset, MultipleLinearModel, MultipleLinearRegression
+from aitk.multiple_linear_regression import (
+    MultipleLinearProblemDataset,
+    MultipleLinearModel,
+)
 from datasets.dataset_2D_regression import x1, x2, y
 from numa.matrix import Matrix
 from numa.vector import Vector
 
 dataset = MultipleLinearProblemDataset.create(
     Matrix.with_columns(Vector(z_score_normalization(x1)), Vector(z_score_normalization(x2))),
-    Vector(z_score_normalization(y))
+    Vector(z_score_normalization(y)),
 )
 
 NB_ITERATIONS = 2000
@@ -31,7 +34,7 @@ for learning_rate in learning_rates:
 fig = plt.figure(figsize=(12, 6))
 
 ax = fig.add_subplot(1, 1, 1)
-ax.axhline(0, color='grey', linewidth=1)
+ax.axhline(0, color="grey", linewidth=1)
 ax.set_xlabel("iterations")
 ax.set_ylabel("cost")
 

@@ -2,7 +2,10 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 
 from aitk.feature_scaling import z_score_normalization
-from aitk.multiple_logistic_regression import MultipleLogisticProblemDataset, MultipleLogisticModel
+from aitk.multiple_logistic_regression import (
+    MultipleLogisticProblemDataset,
+    MultipleLogisticModel,
+)
 from datasets.dataset_2D_classification import x1, x2, y
 from numa.matrix import Matrix
 from numa.vector import Vector
@@ -15,11 +18,7 @@ Il est très difficile de faire converger le modèle avec les features brutes.
 x1 = z_score_normalization(x1)
 x2 = z_score_normalization(x2)
 
-dataset = MultipleLogisticProblemDataset.create(
-    X=Matrix.with_columns(
-        Vector(x1), Vector(x2)),
-    y=Vector(y)
-)
+dataset = MultipleLogisticProblemDataset.create(X=Matrix.with_columns(Vector(x1), Vector(x2)), y=Vector(y))
 
 n_iterations = 1000
 learning_rate = 5
@@ -79,13 +78,6 @@ def update(frame):
     return model_boundary, cost_plot
 
 
-ani = animation.FuncAnimation(
-    fig,
-    update,
-    frames=n_iterations + 1,
-    blit=True,
-    interval=60,
-    repeat=False
-)
+ani = animation.FuncAnimation(fig, update, frames=n_iterations + 1, blit=True, interval=60, repeat=False,)
 
 plt.show()

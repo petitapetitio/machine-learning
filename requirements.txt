@@ -1,3 +1,4 @@
 matplotlib
 numpy  # matplotlib rely on it
 pytest
+black

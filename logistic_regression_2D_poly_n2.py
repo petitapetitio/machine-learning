@@ -2,7 +2,10 @@ import matplotlib.pyplot as plt
 from matplotlib import animation
 
 from aitk.feature_scaling import z_score_normalization
-from aitk.multiple_logistic_regression import MultipleLogisticProblemDataset, MultipleLogisticModel
+from aitk.multiple_logistic_regression import (
+    MultipleLogisticProblemDataset,
+    MultipleLogisticModel,
+)
 from datasets.dataset_2D_classification_poly import x1 as x1_raw
 from datasets.dataset_2D_classification_poly import x2 as x2_raw
 from datasets.dataset_2D_classification_poly import y as y_raw
@@ -17,11 +20,11 @@ dataset = MultipleLogisticProblemDataset.create(
     X=Matrix.with_columns(
         x1,
         x2,
-        x1 ** 2,
+        x1**2,
         x1.multiply(x2),
-        x2 ** 2,
+        x2**2,
     ),
-    y=y
+    y=y,
 )
 
 n_iterations = 1000
@@ -94,11 +97,11 @@ def boundary_x2(model, x1s):
             result_upper.append(x2_val)
             result_lower.append(x2_val)
         else:
-            disc = B**2 - 4*A*C
+            disc = B**2 - 4 * A * C
             if disc >= 0:
                 sqrt_disc = disc**0.5
-                x2_up = (-B + sqrt_disc) / (2*A)
-                x2_low = (-B - sqrt_disc) / (2*A)
+                x2_up = (-B + sqrt_disc) / (2 * A)
+                x2_low = (-B - sqrt_disc) / (2 * A)
                 result_upper.append(x2_up)
                 result_lower.append(x2_low)
             else:
@@ -119,7 +122,7 @@ def update(frame):
 
     params_history[0].append(model.b)
     for i, wi in enumerate(model.w):
-        params_history[i+1].append(wi)
+        params_history[i + 1].append(wi)
     for param_history, param_plot in zip(params_history, param_plots):
         param_plot.set_data([list(range(len(param_history))), param_history])
 
@@ -132,7 +135,7 @@ ani = animation.FuncAnimation(
     frames=n_iterations + 1,
     blit=True,
     interval=60,
-    repeat=False
+    repeat=False,
 )
 
 plt.legend()

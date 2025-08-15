@@ -26,7 +26,9 @@ class UnivariateLogisticModel:
     w: float
     b: float
 
-    def descent_gradient(self, dataset: UnivariateLogisticProblemDataset, learning_rate: float) -> UnivariateLogisticModel:
+    def descent_gradient(
+        self, dataset: UnivariateLogisticProblemDataset, learning_rate: float
+    ) -> UnivariateLogisticModel:
         new_w = self.w - learning_rate * self._dw(dataset)
         new_b = self.b - learning_rate * self._db(dataset)
         return UnivariateLogisticModel(new_w, new_b)

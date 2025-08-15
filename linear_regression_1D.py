@@ -14,11 +14,15 @@ import matplotlib.animation as anim
 
 import random
 
-from aitk.univariate_linear_regression import UnivariateLinearProblemDataset, UnivariateLinearModel, UnivariateLinearRegression
+from aitk.univariate_linear_regression import (
+    UnivariateLinearProblemDataset,
+    UnivariateLinearModel,
+    UnivariateLinearRegression,
+)
 from numa.vector import Vector
 
 x_vals = Vector.linspace(0, 1, 20)
-y_vals = Vector([x + (-.2 + random.random() * .4) for x in x_vals])
+y_vals = Vector([x + (-0.2 + random.random() * 0.4) for x in x_vals])
 dataset = UnivariateLinearProblemDataset.create(x_vals, y_vals)
 
 model = UnivariateLinearModel(0, 0)
@@ -40,7 +44,7 @@ plot.set_ylim([0, 1])
 # Plot the model
 model_x = [X_MIN, X_MAX]
 model_y = [model.f(X_MIN), model.f(X_MAX)]
-model_line, = plot.plot(model_x, model_y, 'r-')
+(model_line,) = plot.plot(model_x, model_y, "r-")
 
 # Plot the cost function
 plot = axs[1]
@@ -56,13 +60,14 @@ for i in range(W.shape[0]):
 
 plot.set_xlabel("w")
 plot.set_ylabel("b")
-contour = plot.contourf(W, B, Z, levels=50, cmap='viridis')
+contour = plot.contourf(W, B, Z, levels=50, cmap="viridis")
 cbar = fig.colorbar(contour, ax=plot)
 cbar.set_label("J(w,b)")
 wb_point = plot.scatter(model.w, model.b, color="red")
 
 
 # Animation
+
 
 def init():
     model_line.set_data([X_MIN, X_MAX], [model.f(X_MIN), model.f(X_MAX)])
@@ -85,9 +90,7 @@ ani = anim.FuncAnimation(
     init_func=init,
     blit=True,
     interval=60,
-    repeat=False
+    repeat=False,
 )
 
 plt.show()
-
-

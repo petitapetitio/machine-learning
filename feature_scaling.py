@@ -1,4 +1,8 @@
-from aitk.feature_scaling import divide_by_max, mean_normalization, z_score_normalization
+from aitk.feature_scaling import (
+    divide_by_max,
+    mean_normalization,
+    z_score_normalization,
+)
 from datasets.dataset_1D_regression import x
 import matplotlib.pyplot as plt
 
@@ -22,6 +26,3 @@ axs[3].set_title("Z-score")
 plt.subplots_adjust(wspace=0.4)
 fig.suptitle("FEATURE SCALING")
 plt.show()
-
-
-

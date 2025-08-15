@@ -30,7 +30,12 @@ class MultipleLogisticModel:
     w: Vector
     b: float
 
-    def descent_gradient(self, dataset: MultipleLogisticProblemDataset, learning_rate: float, lambda_: float = 0) -> MultipleLogisticModel:
+    def descent_gradient(
+        self,
+        dataset: MultipleLogisticProblemDataset,
+        learning_rate: float,
+        lambda_: float = 0,
+    ) -> MultipleLogisticModel:
         new_w = self.w - self._dw(dataset, lambda_) * learning_rate
         new_b = self.b - self._db(dataset) * learning_rate
         return MultipleLogisticModel(new_w, new_b)
@@ -59,7 +64,7 @@ class MultipleLogisticModel:
     def cost(self, dataset: MultipleLogisticProblemDataset) -> float:
         score = 0
         for x, y in zip(dataset.X.rows(), dataset.y):
-            loss = -math.log(self.f(x)) if y >= 0.5 else - math.log(1 - self.f(x))
+            loss = -math.log(self.f(x)) if y >= 0.5 else -math.log(1 - self.f(x))
             score += loss
         score /= 2 * dataset.nb_samples()
         return score
@@ -67,7 +72,7 @@ class MultipleLogisticModel:
 
 def _sigmoid(z: float, eps=1e-12) -> float:
     s = 1 / (1 + math.exp(-z))
-    s = min(max(s, eps), 1-eps)
+    s = min(max(s, eps), 1 - eps)
     return s
 
 
@@ -75,7 +80,6 @@ def _sigmoid(z: float, eps=1e-12) -> float:
 class MultipleLogisticRegression:
     n_iterations: int
     learning_rate: float
-
 
     def fit(self, dataset: MultipleLogisticProblemDataset) -> MultipleLogisticModel:
         model = MultipleLogisticModel(Vector.zeros(dataset.nb_features()), 0)
